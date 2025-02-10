@@ -578,22 +578,518 @@ export default Card;
 
 ### 5.Gestion de eventos
 
-```typescript
+- Vamos a darle un comportammiento a cada elemento de la lista, que va a ser hacer un console.log cada vez que son clickeados.
 
+  ```typescript
+  type Props = {
+    data: string[];
+  };
+
+  function List({ data }: Props) {
+    return (
+      <div>
+        <ul className="list-group">
+          {data.map((element, index) => (
+            <li
+              onClick={() => console.log(element)}
+              className="list-group-item"
+              key={`${index}-${element}`}
+            >
+              {index + 1}.- {element}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  export default List;
+  ```
+
+- Ahora lo pasaremos a una función handleClick que es una buena practica, para saber que tipo debe tener debemos revisar la función, poner el mouse sobre el parametro que recibe y te indicara el tipo, en este caso es mouse event.
+
+  ```typescript
+  import { MouseEvent } from "react";
+
+  type Props = {
+    data: string[];
+  };
+
+  function List({ data }: Props) {
+    const handleClick = (element: MouseEvent) => {
+      console.log(element);
+    };
+    return (
+      <div>
+        <ul className="list-group">
+          {data.map((element, index) => (
+            <li
+              onClick={handleClick}
+              className="list-group-item"
+              key={`${index}-${element}`}
+            >
+              {index + 1}.- {element}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  export default List;
+  ```
+
+- Sin embargo, este no es el resultado que queremos, para pasar el elemento debemos hacerlo de esta forma:
+
+  ```typescript
+  type Props = {
+    data: string[];
+  };
+
+  function List({ data }: Props) {
+    const handleClick = (element: string) => {
+      console.log(element);
+    };
+    return (
+      <div>
+        <ul className="list-group">
+          {data.map((element, index) => (
+            <li
+              onClick={() => handleClick(element)}
+              className="list-group-item"
+              key={`${index}-${element}`}
+            >
+              {index + 1}.- {element}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  export default List;
+  ```
+
+### 6. Getion de Estado
+
+- Resaltar un elemento, aqui estamos resaltando el elemento 1 sin embargo, cuando cambiamos el index, no cambia el elemento resaltado.
+
+  ```typescript
+  type Props = {
+    data: string[];
+  };
+
+  function List({ data }: Props) {
+    let index = 1;
+    const handleClick = (i: number) => {
+      index = i;
+      console.log(index);
+    };
+    return (
+      <div>
+        <ul className="list-group">
+          {data.map((element, i) => (
+            <li
+              onClick={() => handleClick(i)}
+              className={`list-group-item ${index === i ? "active" : ""}`}
+              key={`${i}-${element}`}
+            >
+              {i + 1}.- {element}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  export default List;
+  ```
+
+- Para solucionar esto debemos usar el hook useState, primero importamos el hook de react, luego definimos el valor inicial, y finalmente establecemos la condicion para el cambio o set.
+
+  ```typescript
+  import { useState } from "react";
+
+  type Props = {
+    data: string[];
+  };
+
+  function List({ data }: Props) {
+    const [index, setIndex] = useState(1);
+    const handleClick = (i: number) => {
+      setIndex(i);
+    };
+    return (
+      <div>
+        <ul className="list-group">
+          {data.map((element, i) => (
+            <li
+              onClick={() => handleClick(i)}
+              className={`list-group-item ${index === i ? "active" : ""}`}
+              key={`${i}-${element}`}
+            >
+              {i + 1}.- {element}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  export default List;
+  ```
+
+- Solo para mostrar, duplica la lista.
+
+  App.tsx
+
+  ```typescript
+  import Card, { CardBody } from "./Components/Card";
+  import List from "./Components/List";
+  import Titulo from "./Components/Titulo";
+
+  function App() {
+    const list = [
+      "Constancia",
+      "Disciplina",
+      "Rescilencia",
+      "Perseverancia",
+      "Paciencia",
+    ];
+    return (
+      <>
+        <Titulo />
+        <Card>
+          <CardBody title={"Hola Mundo!"} text={"Chao Mundo!"} />
+        </Card>
+        <List data={list} />
+        <List data={list} />
+      </>
+    );
+  }
+
+  export default App;
+  ```
+
+### 7. Funciones como prop
+
+- Modificamos el archivo List.tsx para uqe sea capaz de recibir funciones como props:
+
+  List.tsx
+
+  ```typescript
+  import { useState } from "react";
+
+  type Props = {
+    data: string[];
+    onSelect?: (element: string) => void; //Se deja la propiedad como optativa
+  };
+
+  function List({ data, onSelect }: Props) {
+    const [index, setIndex] = useState(1);
+    const handleClick = (i: number, element: string) => {
+      setIndex(i);
+      onSelect?.(element); //Se deja el onselect como optativo, sin embargo necesita el "." si no TypeScript lanza error: 🔴':' expected.ts(1005)
+    };
+    return (
+      <div>
+        <ul className="list-group">
+          {data.map((element, i) => (
+            <li
+              onClick={() => handleClick(i, element)}
+              className={`list-group-item ${index === i ? "active" : ""}`}
+              key={`${i}-${element}`}
+            >
+              {i + 1}.- {element}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  export default List;
+  ```
+
+- Mandamos las funciones como props y comparamos los resultados:
+
+  App.tsx
+
+  ```typescript
+  import Card, { CardBody } from "./Components/Card";
+  import List from "./Components/List";
+  import Titulo from "./Components/Titulo";
+
+  function App() {
+    const handleSelect1 = (element: string) => {
+      console.log(`Mostrando ${element}`);
+    };
+    const handleSelect2 = (element: string) => {
+      console.log(`Imprimiendo ${element}`);
+    };
+    const list = [
+      "Constancia",
+      "Disciplina",
+      "Rescilencia",
+      "Perseverancia",
+      "Paciencia",
+    ];
+    return (
+      <>
+        <Titulo />
+        <Card>
+          <CardBody title={"Hola Mundo!"} text={"Chao Mundo!"} />
+        </Card>
+        <List data={list} onSelect={handleSelect1} />
+        <List data={list} onSelect={handleSelect2} />
+      </>
+    );
+  }
+
+  export default App;
+  ```
+
+### 8. Truthy y Falsy en React (Short circuit operator):
+
+Falsy: 0, '', false, undefined, null. En React el 0 no funciona como falsy. El cero en este ejemplo se muestra. No te preocupes por este error. 🔴 This kind of expression is always falsy.ts(2873)
+
+```typescript
+import Card, { CardBody } from "./Components/Card";
+import List from "./Components/List";
+import Titulo from "./Components/Titulo";
+
+function App() {
+  const handleSelect1 = (element: string) => {
+    console.log(`Mostrando ${element}`);
+  };
+  const handleSelect2 = (element: string) => {
+    console.log(`Imprimiendo ${element}`);
+  };
+  const list = [
+    "Constancia",
+    "Disciplina",
+    "Rescilencia",
+    "Perseverancia",
+    "Paciencia",
+  ];
+
+  return (
+    <>
+      <Titulo />
+      <Card>
+        <CardBody title={"Hola Mundo!"} text={"Chao Mundo!"} />
+      </Card>
+      <List data={list} onSelect={handleSelect1} />
+      <List data={list} onSelect={handleSelect2} />
+      {"" && "vacio"} //🔴 This kind of expression is always falsy
+      {false && "falso"}
+      {undefined && "indefinido"} //🔴 This kind of expression is always
+      {null && "nulo"} //🔴 This kind of expression is always falsy
+      {0 && "cero"}
+    </>
+  );
+}
+
+export default App;
 ```
 
-```typescript
+### 9.Renderizado condicional
 
+- Esta es la forma de hacerlo:
+
+  ```typescript
+  import Card, { CardBody } from "./Components/Card";
+  import List from "./Components/List";
+  import Titulo from "./Components/Titulo";
+
+  function App() {
+    const handleSelect1 = (element: string) => {
+      console.log(`Mostrando ${element}`);
+    };
+    const handleSelect2 = (element: string) => {
+      console.log(`Imprimiendo ${element}`);
+    };
+    const list = [
+      "Constancia",
+      "Disciplina",
+      "Rescilencia",
+      "Perseverancia",
+      "Paciencia",
+    ];
+
+    const zeroList: [] = [];
+    const content = zeroList.length ? (
+      <List data={zeroList} />
+    ) : (
+      "No hay elementos"
+    );
+    return (
+      <>
+        <Titulo />
+        <Card>
+          <CardBody title={"Hola Mundo!"} text={"Chao Mundo!"} />
+        </Card>
+        <List data={list} onSelect={handleSelect1} />
+        <List data={list} onSelect={handleSelect2} />
+        {/* {"" && "vacio"} */}
+        {false && "falso"}
+        {/* {undefined && "indefinido"} */}
+        {/* {null && "nulo"} */}
+        {0 && "cero"}
+        <br />
+        {content}
+      </>
+    );
+  }
+
+  export default App;
+  ```
+
+- También podemos hacerlo como una FAF ()=>{}
+
+## Boton que cambia de estado
+
+### Instrucciones: busca 2 botones en boostrap, uno para activado y uno para desactivado, y pasale la propiedadd de children.
+
+### Botones:
+
+```html
+<button type="button" class="btn btn-primary">Primary</button>
+<button type="button" class="btn btn-secondary">Secondary</button>
 ```
 
-```typescript
+### Crear el archivo Button.tsx y usar el snipet ts (typescript) + rf (react functional) + ce (component export) = tsrfce
 
+Button.tsx
+
+```typescript
+type Props = {
+  children: React.ReactNode;
+  isLoading: boolean;
+  onClick: () => void;
+};
+
+const Button = ({ children, isLoading, onClick }: Props) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={isLoading}
+      type="button"
+      className={`btn btn-${isLoading ? "secondary" : "primary"}`}
+    >
+      {isLoading ? "Cargando..." : children}
+    </button>
+  );
+};
+
+export default Button;
 ```
 
-```typescript
+App.tsx
 
+```typescript
+import { useState } from "react";
+import Button from "./Components/Button";
+import Card, { CardBody } from "./Components/Card";
+
+function App() {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleClick = () => setIsLoading(!isLoading);
+  return (
+    <>
+      <Card>
+        <CardBody title={"Hola Mundo!"} text={"Chao Mundo!"} />
+        <Button isLoading={isLoading} onClick={handleClick}>
+          Hola Mundo!
+        </Button>
+      </Card>
+    </>
+  );
+}
+
+export default App;
 ```
 
-```typescript
+## Gestor de minions
 
+### Crear una lista que va a tener algunos elemntos, pero además vamos a tener 2 botones al comienzo, y la funcionalidad que van a tener estos botones es que van a ir agregando minions a mi listado, y si yo picho agregar an a ir agregando minions a mi listado pero si pincho eliminar, va a ir borrando el ultimo elemento.
+
+App.tsx
+
+```typescript
+import { useState } from "react";
+import Button from "./Components/Button";
+import Card, { CardBody } from "./Components/Card";
+import List from "./Components/List";
+
+function App() {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleClick = () => setIsLoading(!isLoading);
+  const [minions, setMinions] = useState(["Gru"]);
+  const addButton = () => setMinions([...minions, "Minion"]);
+  const removeButton = () => setMinions(minions.slice(0, -1));
+  const list = [
+    "Constancia",
+    "Disciplina",
+    "Rescilencia",
+    "Perseverancia",
+    "Paciencia",
+  ];
+  return (
+    <>
+      <Card>
+        <CardBody title={"Hola Mundo!"} text={"Chao Mundo!"} />
+        <Button isLoading={isLoading} onClick={handleClick}>
+          Hola Mundo!
+        </Button>
+      </Card>
+      <br />
+      <List data={list} />
+      <br />
+      <Button onClick={addButton}>Agregar</Button>
+      <Button onClick={removeButton} buttonType={"danger"}>
+        Eliminar
+      </Button>
+      <br />
+      <List data={minions} />
+    </>
+  );
+}
+
+export default App;
+```
+
+Button.tsx
+
+```typescript
+type Props = {
+  children: React.ReactNode;
+  isLoading?: boolean;
+  onClick: () => void;
+  buttonType?: string;
+};
+
+const Button = ({
+  children,
+  isLoading = false,
+  onClick,
+  buttonType,
+}: Props) => {
+  const buttonClass = buttonType
+    ? "btn btn-danger"
+    : `btn btn-${isLoading ? "secondary" : "primary"}`;
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={isLoading}
+      type="button"
+      className={buttonClass}
+    >
+      {isLoading ? "Cargando..." : children}
+    </button>
+  );
+};
+
+export default Button;
 ```
