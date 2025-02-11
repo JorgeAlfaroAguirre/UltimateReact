@@ -1,0 +1,11 @@
+.button {
+  background-color: red;
+}
+
+.disableButton {
+  background-color: gray;
+}
+
+.padded {
+  padding: 25px 30px;
+}
