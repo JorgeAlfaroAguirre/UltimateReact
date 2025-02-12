@@ -1,15 +1,14 @@
 import { useState } from "react";
 import Alert from "./Components/Alert";
-import { IoIosSend } from "react-icons/io";
 
 const App = () => {
   const [status, setStatus] = useState(true);
   const toggleStatus = () => setStatus(!status);
-  const message = ["Alert!", "Success!"];
+  const message = ["Send!", "Waiting!"];
   return (
     <>
       <Alert status={status} onClick={toggleStatus}>
-        {message} <IoIosSend />
+        {message}
       </Alert>
     </>
   );

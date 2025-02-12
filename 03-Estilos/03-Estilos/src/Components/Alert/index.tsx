@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import styles from "./Alert.module.css";
-
+import { IoIosSend } from "react-icons/io";
+import { FaHourglassEnd } from "react-icons/fa";
 type Props = {
   children: ReactNode;
   status: boolean;
@@ -9,7 +10,7 @@ type Props = {
 
 const Alert = ({ children, status, onClick }: Props) => {
   const childrenArray = React.Children.toArray(children);
-
+  const icon = status ? <IoIosSend /> : <FaHourglassEnd />;
   return (
     <div
       className={[
@@ -22,7 +23,8 @@ const Alert = ({ children, status, onClick }: Props) => {
         ? status
           ? childrenArray[0]
           : childrenArray[1]
-        : children}
+        : children}{" "}
+      <span style={{ position: "relative", top: 2 }}>{icon}</span>
     </div>
   );
 };
