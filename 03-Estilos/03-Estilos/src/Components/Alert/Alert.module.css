@@ -1,0 +1,19 @@
+.alert {
+  width: 100px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border-style: solid;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+.alertActive {
+  background-color: red;
+  border-color: darkred;
+}
+
+.alertInactive {
+  background-color: blue;
+  border-color: darkblue;
+}

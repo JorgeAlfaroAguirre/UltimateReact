@@ -194,6 +194,140 @@ Si te faltan los tipos
 npm i @types/styled-components
 ```
 
+##### Como podemos usarlos (me da un error al mostrar quiero ver este video de nuevo más adelante)
+
+Button2.tsx
+
+```typescript
+import styled from "styled-components";
+
+type BtnProps = {
+  isLoading?: boolean;
+};
+type Props = {
+  children: React.ReactNode;
+  isLoading?: boolean;
+  onClick: () => void;
+};
+const Btn = styled.button<BtnProps>`
+  background-color: ${(props) => (props.isLoading ? "gray" : "blue")};
+  padding: 25px 30px;
+  color: white;
+`;
+
+const Button2 = ({ children, isLoading, onClick }: Props) => {
+  return (
+    <Btn onClick={onClick} isLoading={isLoading}>
+      {children}
+    </Btn>
+  );
+};
+
+export default Button2;
 ```
 
+App.tsx
+
+```typescript
+import { useState } from "react";
+import Button from "./Components/Button";
+import Button2 from "./Components/Button2";
+
+const App = () => {
+  const [isLoading1, setIsLoading1] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
+  const handleClick1 = () => setIsLoading1(!isLoading1);
+  const handleClick2 = () => setIsLoading2(!isLoading2);
+  return (
+    <>
+      <Button onClick={handleClick1} isLoading={isLoading1}>
+        Hola Mundo!
+      </Button>
+      <Button2 onClick={handleClick2} isLoading={isLoading2}>
+        Chao Mundo!
+      </Button2>
+    </>
+  );
+};
+
+export default App;
+```
+
+### Bibliotecas Populares
+
+- Bootstrap -> react.Bootstrap
+- Tailwind -> Daisy UI
+- Bulma CSS -> react Bulma
+- Chakra UI
+
+### React Icons
+
+https://react-icons.github.io/react-icons/
+
+### Crea un componente que ses llame alert, y que cambie de color y mensaje cuando se clickee.
+
+index.tsx
+
+```typescript
+import { useState } from "react";
+import Alert from "./Components/Alert";
+
+const App = () => {
+  const [status, setStatus] = useState(true);
+  const toggleStatus = () => setStatus(!status);
+  return (
+    <>
+      <Alert status={status} onClick={toggleStatus}>
+        Alert!
+      </Alert>
+    </>
+  );
+};
+
+export default App;
+```
+
+Alert.module.css
+
+```css
+.alert {
+  width: 100px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border-style: solid;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+.alertActive {
+  background-color: red;
+  border-color: darkred;
+}
+
+.alertInactive {
+  background-color: blue;
+  border-color: darkblue;
+}
+```
+
+App.tsx
+
+```typescript
+import { useState } from "react";
+import Alert from "./Components/Alert";
+
+const App = () => {
+  const [status, setStatus] = useState(true);
+  const toggleStatus = () => setStatus(!status);
+  return (
+    <>
+      <Alert status={status} onClick={toggleStatus}>
+        Alert!
+      </Alert>
+    </>
+  );
+};
+
+export default App;
 ```

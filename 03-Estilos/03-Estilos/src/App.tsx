@@ -1,20 +1,16 @@
 import { useState } from "react";
-import Button from "./Components/Button";
-import Button2 from "./Components/Button2";
+import Alert from "./Components/Alert";
+import { IoIosSend } from "react-icons/io";
 
 const App = () => {
-  const [isLoading1, setIsLoading1] = useState(false);
-  const [isLoading2, setIsLoading2] = useState(false);
-  const handleClick1 = () => setIsLoading1(!isLoading1);
-  const handleClick2 = () => setIsLoading2(!isLoading2);
+  const [status, setStatus] = useState(true);
+  const toggleStatus = () => setStatus(!status);
+  const message = ["Alert!", "Success!"];
   return (
     <>
-      <Button onClick={handleClick1} isLoading={isLoading1}>
-        Hola Mundo!
-      </Button>
-      <Button2 onClick={handleClick2} isLoading={isLoading2}>
-        Chao Mundo!
-      </Button2>
+      <Alert status={status} onClick={toggleStatus}>
+        {message} <IoIosSend />
+      </Alert>
     </>
   );
 };
