@@ -118,7 +118,7 @@ export default Button;
 
 ```typescript
 import { useState } from "react";
-import Button from "./Components/Button/Index";
+import Button from "./Components/Button";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -177,12 +177,21 @@ export default Button;
 }
 ```
 
-```
+### CSS en JSX o TSX
+
+#### Orden: primero va el css y luego va el tsx
+
+#### Instalar Style components https://styled-components.com/
+
+```bash
+npm install styled-components
 
 ```
 
-```
+Si te faltan los tipos
 
+```bash
+npm i @types/styled-components
 ```
 
 ```
