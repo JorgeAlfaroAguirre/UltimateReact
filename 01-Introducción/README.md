@@ -17,7 +17,7 @@ Vue
 Preact
 Lit
 Svelte
-Solid
+Solidhttps://www.linkedin.com/in/jorge-alfaro-04953544/
 Qwik
 Others
 ```

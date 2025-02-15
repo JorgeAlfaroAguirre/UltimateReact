@@ -2,6 +2,87 @@
 
 ## 01. Introducción
 
+### Se crea una nueva app, con npm create vite
+
+App.tsx
+
+```Typescript
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
+}
+
+export default App
+```
+
+### Eliminar todos los estilos y dejar solo el useState
+
+App.tsx
+
+```Typescript
+import { useState } from "react";
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <button onClick={() => setCount((count) => count + 1)}>
+        count is {count}
+      </button>
+    </>
+  );
+}
+
+export default App;
+```
+
+main.tsx
+
+```Typescript
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+```
+
+### Con esto queda el useState limpio, y podedmos empezar a trabajar con el
+
 - El hook de useState se actualiza por lote. Si tenemos más de una useState, va a esperar que todos se ejecuten y luego va a re-renderizar el componente.
 - El hook de useState nunca debe estar dentro de un if, dentro de un for, debe estar lo más a la izquierda posible y en el primer nivel del componente.
 - El estado se guarda fuera de los componentes.
