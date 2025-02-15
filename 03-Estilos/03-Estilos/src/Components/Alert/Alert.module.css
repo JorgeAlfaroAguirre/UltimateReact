@@ -8,6 +8,10 @@
   color: white;
 }
 
+.alert:hover {
+  background-color: aqua;
+}
+
 .alertActive {
   background-color: red;
   border-color: darkred;
