@@ -81,15 +81,54 @@ createRoot(document.getElementById("root")!).render(
 
 ```
 
-### Con esto queda el useState limpio, y podedmos empezar a trabajar con el
+### Comentarios
 
-- El hook de useState se actualiza por lote. Si tenemos más de una useState, va a esperar que todos se ejecuten y luego va a re-renderizar el componente.
+- No importa cuantas veces se actualice el useState, mejor dicho, no importa cuantas lineas tenga el useState, se actualizara una sola vez, porque el useState se actualiza por lote. Esto quiere decir que si tiene 3 lineas que requieran actualización, primero se actualizaran los 3 y luego se re-renderizara el componente.
 - El hook de useState nunca debe estar dentro de un if, dentro de un for, debe estar lo más a la izquierda posible y en el primer nivel del componente.
-- El estado se guarda fuera de los componentes.
+- El estado siempre se guarda fuera de los componentes. Vamos a poder crear x componentes con el mismo estado.
 
 ## 02. Actualización por Lote
 
 - Con strickmode se renderizan 2 veces los componentes, para evitar errores.
+
+  App.tsx
+
+  ```Typescript
+  import { useState } from "react";
+
+  function App() {
+    console.log("Renderizando...");
+    const [count, setCount] = useState(0);
+
+    const handleClick = () => {
+      setCount(count + 1);
+    };
+
+    return (
+      <>
+        <button onClick={handleClick}>count is {count}</button>
+      </>
+    );
+  }
+
+  export default App;
+  ```
+
+  main.tsx
+
+  ```Typescript
+  import { StrictMode } from "react";
+  import { createRoot } from "react-dom/client";
+  import App from "./App.tsx";
+
+  createRoot(document.getElementById("root")!).render(
+    //<StrictMode> //Si sacamos el StrickMode se rendizara sólo una vez
+      <App />
+    //</StrictMode>
+  );
+
+  ```
+
 - Tomar en cuenta:
 
   ```typescript
