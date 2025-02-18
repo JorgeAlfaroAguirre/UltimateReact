@@ -14,4 +14,4 @@ export const contactSchema = z.object({
     .email("Correo invalido"),
 });
 
-export type Contact = z.infer<typeof contactSchema> & { id: string };
+export type Contact = z.infer<typeof contactSchema> & { id?: string };
