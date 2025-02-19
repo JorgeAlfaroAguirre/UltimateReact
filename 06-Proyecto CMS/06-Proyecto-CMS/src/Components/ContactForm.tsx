@@ -7,6 +7,7 @@ import Select from "./Select";
 
 type Props = {
   onSubmit: (contact: Contact) => void;
+  // options: readonly string[];
 };
 
 const ContactForm = ({ onSubmit }: Props) => {

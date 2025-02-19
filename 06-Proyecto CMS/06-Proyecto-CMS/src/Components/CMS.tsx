@@ -12,6 +12,7 @@ const CMS = () => {
   // const cleanForm = () => {
   //   setContacts([]);
   // };
+  console.log(contacts);
   return (
     <div className="container">
       <div className="row">
