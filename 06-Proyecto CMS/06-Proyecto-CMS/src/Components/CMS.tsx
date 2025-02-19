@@ -9,12 +9,18 @@ const CMS = () => {
     setContacts([{ ...contact, id: Math.random().toString() }, ...contacts]);
   const deleteContact = (id: string) =>
     setContacts(contacts.filter((c) => c.id != id));
-  console.log(contacts);
+  // const cleanForm = () => {
+  //   setContacts([]);
+  // };
   return (
     <div className="container">
       <div className="row">
         <div className="col">
           <ContactForm onSubmit={addContact} />
+          {/* <button onClick={cleanForm} className="btn btn-danger">
+            {" "}
+            Limpiar
+          </button> */}
         </div>
       </div>
       <div className="row">

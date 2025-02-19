@@ -1,15 +1,32 @@
-type Props = { readonly options: string[] };
+import { useFormContext } from "react-hook-form";
 
-const Select = ({ options }: Props) => {
+type Props = {
+  options: readonly string[];
+  defaultMessage: string;
+  label: string;
+  name: string;
+};
+
+const Select = ({ options, defaultMessage, label, name }: Props) => {
+  const { register, formState, getFieldState } = useFormContext();
+  const { error } = getFieldState(name, formState);
   return (
-    <select className="form-select" aria-label="Default select example">
-      <option selected>Open this select menu</option>
-      {options.map((o) => (
-        <option key={o} value={o}>
-          {o}
-        </option>
-      ))}
-    </select>
+    <div className="mb-3">
+      <label className="form-label">{label}</label>
+      <select
+        {...register(name)}
+        className="form-select"
+        aria-label="Default select example"
+      >
+        <option>{defaultMessage}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+      {error?.message && <div className="text-danger">{error?.message}</div>}
+    </div>
   );
 };
 

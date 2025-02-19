@@ -7,10 +7,9 @@ import Select from "./Select";
 
 type Props = {
   onSubmit: (contact: Contact) => void;
-  options: readonly string[];
 };
 
-const ContactForm = ({ onSubmit, options }: Props) => {
+const ContactForm = ({ onSubmit }: Props) => {
   const methods = useForm<Contact>({
     resolver: zodResolver(contactSchema),
   });
@@ -20,8 +19,16 @@ const ContactForm = ({ onSubmit, options }: Props) => {
         <Input name="name">Nombre</Input>
         <Input name="lastname">Apellido</Input>
         <Input name="email">Correo</Input>
-        <Select options={contactTypeOptions} />
-        <Button>Enviar</Button>
+        <Select
+          options={contactTypeOptions}
+          defaultMessage={"--Selecciona tipo--"}
+          label={"Tipo"}
+          name={"type"}
+        />
+        <Button type="submit">Enviar</Button>
+        <Button onClick={() => methods.reset()} variant="secondary">
+          Limpiar
+        </Button>
       </form>
     </FormProvider>
   );
