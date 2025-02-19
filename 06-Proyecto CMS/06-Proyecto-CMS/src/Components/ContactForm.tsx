@@ -1,14 +1,16 @@
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "./Input";
 import Button from "./Button";
-import { Contact, contactSchema } from "../schemas/Contact";
+import { Contact, contactSchema, contactTypeOptions } from "../schemas/Contact";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Select from "./Select";
 
 type Props = {
   onSubmit: (contact: Contact) => void;
+  options: readonly string[];
 };
 
-const ContactForm = ({ onSubmit }: Props) => {
+const ContactForm = ({ onSubmit, options }: Props) => {
   const methods = useForm<Contact>({
     resolver: zodResolver(contactSchema),
   });
@@ -18,6 +20,7 @@ const ContactForm = ({ onSubmit }: Props) => {
         <Input name="name">Nombre</Input>
         <Input name="lastname">Apellido</Input>
         <Input name="email">Correo</Input>
+        <Select options={contactTypeOptions} />
         <Button>Enviar</Button>
       </form>
     </FormProvider>
