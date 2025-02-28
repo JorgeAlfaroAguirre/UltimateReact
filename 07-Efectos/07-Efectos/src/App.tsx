@@ -12,6 +12,7 @@ function App() {
     loading,
     error,
     addData: addUser,
+    deleteData: deleteUser,
   } = useHttpData<User>(url); // data: users is an alias
   if (loading) {
     return <p>Loading...</p>;
@@ -27,8 +28,11 @@ function App() {
         <button onClick={() => addUser({ name: "Dagadito" })}>
           Agregar Usuario
         </button>
+        <button onClick={() => deleteUser(1)}>Eliminar Usuario</button>
         {users.map((user) => (
-          <li key={user.id}>{user.name}</li>
+          <li key={user.id}>
+            {user.id} {user.name}
+          </li>
         ))}
       </ul>
     </>
