@@ -135,6 +135,10 @@ export default App;
 
 ```
 
+### Agrengando elementos
+
+Optimistic ui
+
 ```Typescript
 
 ```
