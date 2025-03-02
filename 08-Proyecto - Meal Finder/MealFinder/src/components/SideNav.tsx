@@ -9,7 +9,9 @@ type Props = {
 const SideNav = ({ categories }: Props) => {
   return (
     <>
-      <Heading color="blue.400">Categorias</Heading>
+      <Heading color="blue.400" fontSize={12} fontWeight="bold" mb={4}>
+        Categorias
+      </Heading>
     </>
   );
 };

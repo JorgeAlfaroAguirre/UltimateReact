@@ -38,7 +38,7 @@ function App() {
           <Header />
         </GridItem>
 
-        <GridItem pl="2" bg="pink.300" area={"nav"} height="calc(100vh - 60px)">
+        <GridItem p="5" area={"nav"} height="calc(100vh - 60px)">
           <SideNav categories={data} loading={loading} />
         </GridItem>
 
