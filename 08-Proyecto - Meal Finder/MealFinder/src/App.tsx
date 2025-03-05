@@ -2,42 +2,16 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import Header from "./components/Header";
 import SideNav from "./components/SideNav";
 import MainContent from "./components/MainContent";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Category, CategoryResponse } from "./types";
+import { useState } from "react";
+import { Category } from "./types";
+import useHttpData from "./hooks/useHttpData";
 
 function App() {
-  const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
-  const [data, setData] = useState<Category[]>([]);
-  const [loading, seLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category>({
     strCategory: "Beef",
   });
-
-  useEffect(() => {
-    let ignore = false;
-    const controller = new AbortController();
-    const { signal } = controller;
-    seLoading(true);
-
-    axios
-      .get<CategoryResponse>(url, { signal })
-      .then(({ data }) => {
-        if (!ignore) {
-          setData(data.meals);
-        }
-      })
-      .finally(() => {
-        if (!ignore) {
-          seLoading(false);
-        }
-      });
-
-    return () => {
-      ignore = true;
-      controller.abort();
-    };
-  }, []);
+  const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
+  const { loading, data } = useHttpData<Category>(url);
   return (
     <>
       <Grid
