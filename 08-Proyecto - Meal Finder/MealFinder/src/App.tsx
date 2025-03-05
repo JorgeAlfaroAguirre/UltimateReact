@@ -10,8 +10,10 @@ function App() {
   const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
   const [data, setData] = useState<Category[]>([]);
   const [loading, seLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category>({
+    strCategory: "Beef",
+  });
 
-  console.log(data);
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
@@ -33,13 +35,19 @@ function App() {
         `}
         gridTemplateRows={"60px 1fr 30px"}
         gridTemplateColumns={{ sm: `0 1fr`, md: `250px 1fr` }}
+        fontSize={14}
       >
         <GridItem pl="2" bg="orange.300" area={"header"}>
           <Header />
         </GridItem>
 
         <GridItem p="5" area={"nav"} height="calc(100vh - 60px)">
-          <SideNav categories={data} loading={loading} />
+          <SideNav
+            categories={data}
+            loading={loading}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
         </GridItem>
 
         <GridItem pl="2" bg="green.300" area={"main"}>
