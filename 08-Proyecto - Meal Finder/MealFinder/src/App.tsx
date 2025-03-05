@@ -15,16 +15,28 @@ function App() {
   });
 
   useEffect(() => {
+    let ignore = false;
     const controller = new AbortController();
     const { signal } = controller;
     seLoading(true);
 
     axios
       .get<CategoryResponse>(url, { signal })
-      .then(({ data }) => setData(data.meals))
-      .finally(() => seLoading(false));
+      .then(({ data }) => {
+        if (!ignore) {
+          setData(data.meals);
+        }
+      })
+      .finally(() => {
+        if (!ignore) {
+          seLoading(false);
+        }
+      });
 
-    return () => controller.abort();
+    return () => {
+      ignore = true;
+      controller.abort();
+    };
   }, []);
   return (
     <>
