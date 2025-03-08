@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 export default function useHttpData<T>(url: string) {
   const [data, setData] = useState<T[]>([]);
   const [loading, seLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category>({
-    strCategory: "Beef",
-  });
 
   useEffect(() => {
     let ignore = false;
@@ -33,5 +30,5 @@ export default function useHttpData<T>(url: string) {
     };
   }, []);
 
-  return { loading, data };
+  return { loading, data, setData };
 }
