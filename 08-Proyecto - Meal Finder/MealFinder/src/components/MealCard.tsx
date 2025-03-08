@@ -11,11 +11,10 @@ import { Meal } from "../types/index";
 
 type Props = {
   meal: Meal;
+  openRecipe: () => void;
 };
-const openMeal = () => {
-  console.log("open meal");
-};
-const MealCard = ({ meal: m }: Props) => {
+
+const MealCard = ({ meal: m, openRecipe }: Props) => {
   return (
     <Card boxShadow="lg">
       <CardBody>
@@ -31,7 +30,7 @@ const MealCard = ({ meal: m }: Props) => {
       </CardBody>
 
       <CardFooter pt="0">
-        <Button onClick={openMeal} bgColor="blue.400" color="white">
+        <Button onClick={openRecipe} bgColor="blue.400" color="white">
           Ver receta
         </Button>
       </CardFooter>

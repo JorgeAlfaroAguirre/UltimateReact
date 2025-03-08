@@ -1,11 +1,13 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 import Header from "./components/Header";
 import SideNav from "./components/SideNav";
 import MainContent from "./components/MainContent";
 import { useState } from "react";
-import { Category, Meal, SearchForm } from "./types";
+import { Category, Meal } from "./types";
 import useHttpData from "./hooks/useHttpData";
+import { SearchForm } from "./types/index";
 import axios from "axios";
+import RecipeModal from "./components/RecipeModal";
 
 const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
 const makeMealUrl = (category: Category) => {
@@ -16,6 +18,7 @@ const defaultCategory = {
 };
 
 function App() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCategory, setSelectedCategory] =
     useState<Category>(defaultCategory);
   const { loading, data } = useHttpData<Category>(url);
@@ -23,14 +26,18 @@ function App() {
     loading: loadingMeal,
     data: dataMeal,
     setData: setMeals,
+    seLoading: setLoadingMeal,
   } = useHttpData<Meal>(makeMealUrl(defaultCategory));
 
-  const setApi = (searchForm: SearchForm) => {
-    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchForm.search}`;
-    axios.get<{ meals: Meal[] }>(url).then((data) => {
-      setMeals(data.meals);
-    });
+  const searchApi = (SearchForm: SearchForm) => {
+    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${SearchForm.search}`;
+    setLoadingMeal(true);
+    axios
+      .get<{ meals: Meal[] }>(url)
+      .then(({ data }) => setMeals(data.meals))
+      .finally(() => setLoadingMeal(false));
   };
+
   return (
     <>
       <Grid
@@ -52,7 +59,7 @@ function App() {
           area={"header"}
           overflowY={"auto"}
         >
-          <Header onSubmit={(x) => console.log(x)} />
+          <Header onSubmit={searchApi} />
         </GridItem>
 
         <GridItem
@@ -72,9 +79,14 @@ function App() {
         </GridItem>
 
         <GridItem p="4" bg="gray.100" area={"main"}>
-          <MainContent loading={loadingMeal} meals={dataMeal} />
+          <MainContent
+            openRecipe={onOpen}
+            loading={loadingMeal}
+            meals={dataMeal}
+          />
         </GridItem>
       </Grid>
+      <RecipeModal isOpen={isOpen} onClose={onClose} />
     </>
   );
 }
