@@ -20,9 +20,9 @@ const SideNav = ({
   selectedCategory,
   setSelectedCategory,
 }: Props) => {
-  const selected = {
-    strCategory: "Beef",
-  };
+  // const selected = {
+  //   strCategory: "Beef",
+  // };
   return loading ? (
     <SkeletonText mt="1" noOfLines={8} spacing={6} skeletonHeight={2} />
   ) : (
