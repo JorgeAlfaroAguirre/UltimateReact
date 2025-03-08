@@ -3,16 +3,20 @@ import Header from "./components/Header";
 import SideNav from "./components/SideNav";
 import MainContent from "./components/MainContent";
 import { useState } from "react";
-import { Category, Meal } from "./types";
+import { Category, Meal, MealDetails } from "./types";
 import useHttpData from "./hooks/useHttpData";
 import { SearchForm } from "./types/index";
 import axios from "axios";
 import RecipeModal from "./components/RecipeModal";
+import useFetch from "./hooks/useFetch";
 
-const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
+const baseUrl = "https://www.themealdb.com/api/json/v1/1/";
+const url = `${baseUrl}list.php?c=list`;
+
 const makeMealUrl = (category: Category) => {
-  return `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category.strCategory}`;
+  return `${baseUrl}filter.php?c=${category.strCategory}`;
 };
+
 const defaultCategory = {
   strCategory: "Seafood",
 };
@@ -30,12 +34,22 @@ function App() {
   } = useHttpData<Meal>(makeMealUrl(defaultCategory));
 
   const searchApi = (SearchForm: SearchForm) => {
-    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${SearchForm.search}`;
+    const url = `${baseUrl}search.php?s=${SearchForm.search}`;
     setLoadingMeal(true);
     axios
       .get<{ meals: Meal[] }>(url)
       .then(({ data }) => setMeals(data.meals))
       .finally(() => setLoadingMeal(false));
+  };
+
+  const {
+    fetch,
+    loading: loadingMealDetails,
+    data: mealDetailData,
+  } = useFetch<MealDetails>();
+  const searchMealDetails = (meal: Meal) => {
+    onOpen();
+    fetch(`${baseUrl}lookup.php?i=${meal.idMeal}`);
   };
 
   return (
@@ -80,13 +94,18 @@ function App() {
 
         <GridItem p="4" bg="gray.100" area={"main"}>
           <MainContent
-            openRecipe={onOpen}
+            openRecipe={searchMealDetails}
             loading={loadingMeal}
             meals={dataMeal}
           />
         </GridItem>
       </Grid>
-      <RecipeModal isOpen={isOpen} onClose={onClose} />
+      <RecipeModal
+        data={mealDetailData}
+        loading={loadingMealDetails}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   );
 }
