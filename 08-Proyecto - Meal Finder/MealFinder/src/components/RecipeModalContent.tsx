@@ -27,7 +27,7 @@ const joinIngridients = (data: MealDetails) => {
   return ingridients;
 };
 const RecipeModalContent = ({ data }: Props) => {
-  const ingridients = joinIngridients(data);
+  const ingridients = data ? joinIngridients(data) : [];
   return (
     <>
       <ModalHeader>{data.strMeal}</ModalHeader>
