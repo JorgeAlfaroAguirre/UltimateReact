@@ -1,8 +1,6 @@
 import { Container, Skeleton, SkeletonText } from "@chakra-ui/react";
 
-type Props = {};
-
-const RecepiModalSkeleton = (props: Props) => {
+const RecepiModalSkeleton = () => {
   return (
     <>
       <Container>

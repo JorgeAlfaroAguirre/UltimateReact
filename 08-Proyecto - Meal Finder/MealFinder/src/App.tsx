@@ -47,6 +47,7 @@ function App() {
     loading: loadingMealDetails,
     data: mealDetailData,
   } = useFetch<MealDetails>();
+
   const searchMealDetails = (meal: Meal) => {
     onOpen();
     fetch(`${baseUrl}lookup.php?i=${meal.idMeal}`);
