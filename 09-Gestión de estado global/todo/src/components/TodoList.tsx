@@ -20,7 +20,7 @@ const TodoList = ({ todos, addTodo }: Props) => {
       </button>
       <ul>
         {todos.map((t) => (
-          <li>
+          <li key={t.id}>
             {t.name} {t.completed ? "Terminada" : "Pendiente"}
           </li>
         ))}
