@@ -141,3 +141,52 @@ export default Dashboard;
 ```
 
 ## Custom Provider
+
+Patron componente de alto orden:
+
+```Typescript
+import Dashboard from "./components/Dashboard";
+import MainContent from "./components/MainContent";
+import TodosProvider from "./providers/TodosProvider";
+
+function App() {
+  return (
+    <>
+      <TodosProvider>
+        <Dashboard />
+        <MainContent />
+      </TodosProvider>
+    </>
+  );
+}
+
+export default App;
+```
+
+```TypeScript
+import { ReactNode, useState } from "react";
+import TodosContext from "../contexts/TodosContext";
+import { Todo } from "../types";
+
+type Props = {
+  children: ReactNode;
+};
+export default function TodosProvider({ children }: Props) {
+  const [todos, setTodo] = useState<Todo[]>([
+    { id: 1, name: "Ordenar", completed: false },
+    { id: 2, name: "Aspirar", completed: false },
+  ]);
+
+  const addTodo = (todo: Todo) => {
+    setTodo([todo, ...todos]);
+  };
+
+  return (
+    <>
+      <TodosContext.Provider value={{ todos, addTodo }}>
+        {children}
+      </TodosContext.Provider>
+    </>
+  );
+}
+```
