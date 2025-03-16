@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import TodosContext from "../contexts/TodosContext";
+import useTodos from "../hooks/useTodos";
 
 type Props = {};
 
 const Dashboard = ({}: Props) => {
-  const { todos } = useContext(TodosContext);
+  const { todos } = useTodos();
   return <>Number of Todos {todos.length}</>;
 };
 

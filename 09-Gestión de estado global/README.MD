@@ -190,3 +190,88 @@ export default function TodosProvider({ children }: Props) {
   );
 }
 ```
+
+## Custom Hook
+
+useTodos.ts
+
+```TypeScript
+import { useContext } from "react";
+import TodosContext from "../contexts/TodosContext";
+
+export default function useTodos() {
+  return useContext(TodosContext);
+}
+
+```
+
+Dashboard.tsx
+
+```TypeScript
+import useTodos from "../hooks/useTodos";
+
+type Props = {};
+
+const Dashboard = ({}: Props) => {
+  const { todos } = useTodos();
+  return <>Number of Todos {todos.length}</>;
+};
+
+export default Dashboard;
+
+```
+
+MainContent.tsx
+
+```TypeScript
+import TodoList from "./TodoList";
+
+type Props = {};
+
+const MainContent = ({}: Props) => {
+  return (
+    <>
+      <h2>Todos</h2>
+      <TodoList />
+    </>
+  );
+};
+
+export default MainContent;
+```
+
+useTodos.ts
+
+```TypeScript
+import useTodos from "../hooks/useTodos";
+
+type Props = {};
+const TodoList = ({}: Props) => {
+  const { todos, addTodo } = useTodos();
+  return (
+    <>
+      <button
+        onClick={() =>
+          addTodo({
+            id: Math.random(),
+            name: "Dormir",
+            completed: true,
+          })
+        }
+      >
+        Agregar
+      </button>
+      <ul>
+        {todos.map((t) => (
+          <li key={t.id}>
+            {t.name} {t.completed ? "Terminada" : "Pendiente"}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+};
+
+export default TodoList;
+
+```
