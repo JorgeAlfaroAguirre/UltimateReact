@@ -1,16 +1,15 @@
-import { Todo } from "../types";
+import { useContext } from "react";
 import TodoList from "./TodoList";
+import TodosContext from "../contexts/TodosContext";
 
-type Props = {
-  todos: Todo[];
-  addTodo: (todo: Todo) => void;
-};
+type Props = {};
 
-const MainContentWithContext = ({ todos, addTodo }: Props) => {
+const MainContentWithContext = ({}: Props) => {
+  const { todosWithContext, addTodoWithContext } = useContext(TodosContext);
   return (
     <>
       <h2>Todos With Context</h2>
-      <TodoList todos={todos} addTodo={addTodo} />
+      <TodoList todos={todosWithContext} addTodo={addTodoWithContext} />
     </>
   );
 };

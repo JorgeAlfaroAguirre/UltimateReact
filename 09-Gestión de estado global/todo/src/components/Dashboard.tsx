@@ -1,7 +1,11 @@
-type Props = { amount: number };
+import { useContext } from "react";
+import TodosContext from "../contexts/TodosContext";
 
-const Dashboard = ({ amount }: Props) => {
-  return <>Number of Todos {amount}</>;
+type Props = {};
+
+const Dashboard = ({}: Props) => {
+  const { todos } = useContext(TodosContext);
+  return <>Number of Todos {todos.length}</>;
 };
 
 export default Dashboard;
