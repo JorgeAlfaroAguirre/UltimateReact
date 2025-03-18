@@ -2,6 +2,7 @@ import useTodos from "../hooks/useTodos";
 
 type Props = {};
 const TodoList = ({}: Props) => {
+  console.log("TodoList");
   const { todos, addTodo } = useTodos();
   return (
     <>

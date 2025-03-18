@@ -275,3 +275,106 @@ const TodoList = ({}: Props) => {
 export default TodoList;
 
 ```
+
+### Split Provider
+
+App.tsx
+
+```TypeScript
+import Dashboard from "./components/Dashboard";
+import MainContent from "./components/MainContent";
+import TodosProvider from "./providers/TodosProvider";
+import UserProvider from "./providers/UserPRovider";
+
+function App() {
+  console.log("App");
+  return (
+    <>
+      <TodosProvider>
+        <UserProvider>
+          <Dashboard />
+          <MainContent />
+        </UserProvider>
+      </TodosProvider>
+    </>
+  );
+}
+
+export default App;
+
+```
+
+UserContext.ts
+
+```TypeScript
+import { createContext } from "react";
+
+type UserContextType = {
+  user: { name: string };
+  toggleLogin: () => void;
+};
+
+export default createContext<UserContextType>({} as UserContextType);
+
+```
+
+UserProvider.tsx
+
+```TypeScript
+import { ReactNode, useState } from "react";
+import UserContext from "../contexts/UserContext";
+
+type Props = {
+  children: ReactNode;
+};
+
+export default function UserProvider({ children }: Props) {
+  const [user, setUser] = useState<{ name: string }>({ name: "Sofia" });
+  const toggleLogin = () => {
+    setUser({ name: user.name === "Sofia" ? "Catalina" : "Sofia" });
+  };
+  return (
+    <UserContext.Provider value={{ user, toggleLogin }}>
+      {children}
+    </UserContext.Provider>
+  );
+}
+```
+
+useUser.ts
+
+```TypeScript
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
+
+export default function useUser() {
+  return useContext(UserContext);
+}
+
+```
+
+Dashboard.tsx
+
+```TypeScript
+import useTodos from "../hooks/useTodos";
+import useUser from "../hooks/useUser";
+
+type Props = {};
+
+const Dashboard = ({}: Props) => {
+  console.log("Dashboard");
+  const { todos } = useTodos();
+  const { user, toggleLogin } = useUser();
+  return (
+    <>
+      <div>
+        {user.name} Number of Todos {todos.length}
+      </div>
+      <button onClick={() => toggleLogin()}>Cambio</button>
+    </>
+  );
+};
+
+export default Dashboard;
+
+```
