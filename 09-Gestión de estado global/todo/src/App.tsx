@@ -1,7 +1,8 @@
 import Dashboard from "./components/Dashboard";
 import MainContent from "./components/MainContent";
+import TitlesProvider from "./providers/TitlesProvider";
 import TodosProvider from "./providers/TodosProvider";
-import UserProvider from "./providers/UserPRovider";
+import UserProvider from "./providers/UserProvider";
 
 function App() {
   console.log("App");
@@ -9,8 +10,10 @@ function App() {
     <>
       <TodosProvider>
         <UserProvider>
-          <Dashboard />
-          <MainContent />
+          <TitlesProvider>
+            <Dashboard />
+            <MainContent />
+          </TitlesProvider>
         </UserProvider>
       </TodosProvider>
     </>
